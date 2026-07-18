@@ -6,5 +6,3 @@ opencv-python-headless==4.10.0.84
 pillow==11.0.0
 numpy==1.26.4
 pydantic==2.10.4
-ml_dtypes==0.5.4
-
