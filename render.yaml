@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: beas-insightface
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: BEAS_RENDER_API_KEY
+        generateValue: true
+      - key: INSIGHTFACE_MODEL
+        value: buffalo_l
+      - key: INSIGHTFACE_MODEL_ROOT
+        value: /tmp/insightface
+      - key: EMBEDDING_CACHE_MAX_ITEMS
+        value: 512
+
