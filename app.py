@@ -14,7 +14,7 @@ from PIL import Image
 from insightface.app import FaceAnalysis
 
 
-API_KEY = os.getenv("BEAS_RENDER_API_KEY", "").strip()
+API_KEY = os.getenv("BEAS_RENDER_API_KEY", "beas_7f9d9a8c2e4b44e8a1f3d0c6_render_secret").strip()
 MODEL_NAME = os.getenv("INSIGHTFACE_MODEL", "buffalo_l").strip() or "buffalo_l"
 MODEL_ROOT = os.getenv("INSIGHTFACE_MODEL_ROOT", "/tmp/insightface").strip() or "/tmp/insightface"
 DET_SIZE = int(os.getenv("INSIGHTFACE_DET_SIZE", "640"))
