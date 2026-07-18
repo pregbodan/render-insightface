@@ -7,7 +7,7 @@ services:
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.5
+        value: 3.11.10
       - key: BEAS_RENDER_API_KEY
         generateValue: true
       - key: INSIGHTFACE_MODEL
@@ -16,4 +16,5 @@ services:
         value: /tmp/insightface
       - key: EMBEDDING_CACHE_MAX_ITEMS
         value: 512
+
 

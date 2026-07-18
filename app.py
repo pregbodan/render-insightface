@@ -25,6 +25,7 @@ model_lock = Lock()
 face_app: Optional[FaceAnalysis] = None
 embedding_cache: Dict[str, Dict] = {}
 enrolled_cache: Dict[str, List[float]] = {}
+resolved_model_root: Optional[str] = None
 
 
 class EmbedRequest(BaseModel):
@@ -56,6 +57,28 @@ def require_api_key(x_beas_api_key: Optional[str]) -> None:
         raise HTTPException(status_code=401, detail="Invalid API key")
 
 
+def resolve_model_root() -> str:
+    global resolved_model_root
+    if resolved_model_root is not None:
+        return resolved_model_root
+
+    candidates = [MODEL_ROOT, "/tmp/insightface"]
+    for candidate in candidates:
+        try:
+            os.makedirs(candidate, exist_ok=True)
+            probe_path = os.path.join(candidate, ".write_test")
+            with open(probe_path, "wb") as probe_file:
+                probe_file.write(b"ok")
+            os.remove(probe_path)
+            resolved_model_root = candidate
+            return resolved_model_root
+        except Exception:
+            continue
+
+    resolved_model_root = "/tmp/insightface"
+    return resolved_model_root
+
+
 def get_model() -> FaceAnalysis:
     global face_app
     if face_app is not None:
@@ -64,9 +87,10 @@ def get_model() -> FaceAnalysis:
     with model_lock:
         if face_app is not None:
             return face_app
+        model_root = resolve_model_root()
         instance = FaceAnalysis(
             name=MODEL_NAME,
-            root=MODEL_ROOT,
+            root=model_root,
             allowed_modules=["detection", "recognition"],
             providers=["CPUExecutionProvider"],
         )
@@ -151,7 +175,7 @@ def health() -> Dict:
     return {
         "ok": True,
         "model": MODEL_NAME,
-        "modelRoot": MODEL_ROOT,
+        "modelRoot": resolve_model_root(),
         "embeddingCacheSize": len(embedding_cache),
         "enrolledCacheSize": len(enrolled_cache),
     }
