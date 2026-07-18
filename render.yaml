@@ -11,7 +11,7 @@ services:
       - key: BEAS_RENDER_API_KEY
         generateValue: true
       - key: INSIGHTFACE_MODEL
-        value: buffalo_l
+        value: buffalo_s
       - key: INSIGHTFACE_MODEL_ROOT
         value: /tmp/insightface
       - key: EMBEDDING_CACHE_MAX_ITEMS
